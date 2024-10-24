@@ -1,0 +1,10 @@
+- Backend
+Flask
+Authlib
+python-dotenv
+requests
+flask-cors
+flask-uploads
+
+- Frontend
+@react-oauth/google
