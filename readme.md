@@ -18,7 +18,7 @@ Step 2: Create OAuth 2.0 Client ID
 - Configure the consent screen by providing the necessary information (e.g., application name, support email).
 - Select the application type (Web application).
 - Enter the authorized redirect URIs (http://localhost:5000/auth).
-- Enter the authorized Javascript URIs (http://localhost:3000, http://localhost).
+- Enter the authorized Javascript URIs (http://localhost:5173 or the react localhost, http://localhost).
 - Click "Create."
 
 Your new client ID and client secret will be displayed. Copy and store them in the .env file
