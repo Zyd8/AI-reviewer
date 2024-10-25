@@ -26,7 +26,7 @@ const GoogleLoginButton = () => {
   };
 
   return (
-    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
         {user ? (
           <div className="user-info">
             <h2>Welcome, {user.name}!</h2>

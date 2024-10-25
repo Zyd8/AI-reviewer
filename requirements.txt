@@ -5,6 +5,12 @@ python-dotenv
 requests
 flask-cors
 flask-uploads
+flask-admin
+flask-sqlalchemy
+flask-login 
+flask-mysqldb 
+flask-session
+pytest
 
 - Frontend
 #@react-oauth/google
