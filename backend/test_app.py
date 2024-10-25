@@ -10,4 +10,4 @@ def client():
 def test_index(client):
     rv = client.get('/')
     assert rv.status_code == 200
-    assert b'Hello, World!' in rv.data
+    assert b'If you see this, Flask is running' in rv.data
