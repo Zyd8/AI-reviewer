@@ -8,9 +8,8 @@ flask-uploads
 flask-admin
 flask-sqlalchemy
 flask-login 
-flask-mysqldb 
 flask-session
 pytest
-pymysql
+
 - Frontend
 #@react-oauth/google
