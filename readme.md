@@ -1,5 +1,5 @@
-## .env file to input keys=
-copy the .env.example to .env (backend and frontend folder)
+## .env file to input keys
+copy the .env.example to .env and insert the keys
 
 ## To Generate A Secret Key
 You can use import secrets or other ways to generate a random key   
