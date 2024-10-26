@@ -1,5 +1,9 @@
 from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 from flask_cors import CORS
+from flask_session import Session
 from werkzeug.utils import secure_filename
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
@@ -18,6 +22,32 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# Configure Main database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///main_database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize SQLAlchemy
+db = SQLAlchemy(app)
+
+# Configure Session
+app.config['SESSION_TYPE'] = 'sqlalchemy'
+app.config['SESSION_SQLALCHEMY'] = db
+
+# Initialize Admin and Session
+admin = Admin(app)
+Session(app)
+
+# Example for database
+""""
+# Define a User model
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+
+# Add User model to Flask-Admin to view in /admin route
+admin.add_view(ModelView(User, db.session))
+""" 
 
 # OAuth configuration
 oauth = OAuth(app)
@@ -77,4 +107,6 @@ def upload():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+     with app.app_context():
+        db.create_all()
+        app.run(debug=True)

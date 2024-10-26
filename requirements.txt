@@ -11,6 +11,6 @@ flask-login
 flask-mysqldb 
 flask-session
 pytest
-
+pymysql
 - Frontend
 #@react-oauth/google
