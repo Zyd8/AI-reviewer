@@ -1,5 +1,9 @@
 from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 from flask_cors import CORS
+from flask_session import Session
 from werkzeug.utils import secure_filename
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
@@ -17,6 +21,47 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 # Configure file uploads
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Configure Main database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///main_database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize SQLAlchemy
+db = SQLAlchemy(app)
+
+# Configure Session
+app.config['SESSION_TYPE'] = 'sqlalchemy'
+app.config['SESSION_SQLALCHEMY'] = db
+
+# Initialize Admin and Session
+admin = Admin(app)
+Session(app)
+
+# Example for database
+
+# Define a User model
+class User(db.Model):
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.String, unique=True, nullable=False)
+    
+class Session(db.Model):
+    __tablename__ = 'review_room'
+    id = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.String, unique=True, nullable=False)
+    text = db.Column(db.String, unique=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True, nullable=False)
+    
+class Reviewer(db.Model):
+    __tablename__ = 'reviewer'
+    id = db.Column(db.Integer, primary_key=True)
+    questions = db.Column(db.String, unique=True, nullable=False)
+    answer = db.Column(db.String, unique=True, nullable=False)
+    choices = db.Column(db.String, unique=True, nullable=False)
+    reviewer_type_id = db.Column(db.Integer, unique=True, nullable=False)
+    
+# Add User model to Flask-Admin to view in /admin route
+admin.add_view(ModelView(User, db.session))
 
 
 # OAuth configuration
@@ -77,4 +122,6 @@ def upload():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+     with app.app_context():
+        db.create_all()
+        app.run(debug=True)
