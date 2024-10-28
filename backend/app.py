@@ -38,16 +38,31 @@ admin = Admin(app)
 Session(app)
 
 # Example for database
-""""
+
 # Define a User model
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-
+    client_id = db.Column(db.String, unique=True, nullable=False)
+    
+class Session(db.Model):
+    __tablename__ = 'review_room'
+    id = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.String, unique=True, nullable=False)
+    text = db.Column(db.String, unique=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True, nullable=False)
+    
+class Reviewer(db.Model):
+    __tablename__ = 'reviewer'
+    id = db.Column(db.Integer, primary_key=True)
+    questions = db.Column(db.String, unique=True, nullable=False)
+    answer = db.Column(db.String, unique=True, nullable=False)
+    choices = db.Column(db.String, unique=True, nullable=False)
+    reviewer_type_id = db.Column(db.Integer, unique=True, nullable=False)
+    
 # Add User model to Flask-Admin to view in /admin route
 admin.add_view(ModelView(User, db.session))
-""" 
+
 
 # OAuth configuration
 oauth = OAuth(app)
